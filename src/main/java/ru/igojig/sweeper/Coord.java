@@ -7,14 +7,40 @@ import lombok.Value;
 
 import java.util.Objects;
 
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Coord {
     private int x;
     private int y;
 
-//    private Box box;
+    private static Coord tmpCoord=new Coord();
+
+    public Coord(int x, int y){
+        this.x=x;
+        this.y=y;
+        System.out.println(toString() + " [" + hashCode() + "]");
+    }
+
+    public Coord(Coord coord){
+        this.x=coord.getX();
+        this.y=coord.getY();
+    }
+
+
+    public static Coord getTmpCoord(int x, int y) {
+        tmpCoord.setX(x);
+        tmpCoord.setY(y);
+        return tmpCoord;
+    }
+
+    @Override
+    public int hashCode() {
+        int tmp = ( y +  ((x+1)/2));
+        return x +  (tmp * tmp);
+    }
+
+    //    private Box box;
 
 //    public Coord(int x, int y) {
 //        this.x = x;
@@ -35,12 +61,12 @@ public class Coord {
 //    }
 
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Coord coord)) return false;
-//        return x == coord.x && y == coord.y;
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Coord coord)) return false;
+        return x == coord.x && y == coord.y;
+    }
 //
 //    @Override
 //    public int hashCode() {

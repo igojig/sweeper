@@ -40,8 +40,8 @@ public class Game {
 
     public void start(int bomb_count) {
         ranges = new Range();
-        bomb = new Bomb();
-        flag = new Flag();
+        bomb = new Bomb(ranges);
+        flag = new Flag(ranges);
         bomb.start(bomb_count);
         flag.start();
         infoStr = Status.PLAYED.getName();
@@ -57,24 +57,27 @@ public class Game {
 
     public void leftMouse(int x, int y) {
 
+        Coord tmpCoord=new Coord(x,y);
+//        Coord tmpCoord=new Coord(x,y);
+
         if (status == Status.PLAYED) {
-            switch (flag.getFlags(x, y)) {
+            switch (flag.getFlags(tmpCoord)) {
                 case OPENED -> {
                 }
                 case CLOSED -> {
-                    flag.setFlags(x, y, Cell.OPENED);
+                    flag.setFlags(tmpCoord, Cell.OPENED);
                     boxesOpened++;
-                    switch (bomb.getBomb(x, y)) {
+                    switch (bomb.getBomb(tmpCoord)) {
 
                         case BOMB:
-                            bomb.setBombed(x, y);
+                            bomb.setBombed(tmpCoord);
                             openAllField();
 //                            infoStr = "YOR ARE BOMBED ((( " + String.format("Bombs detected: %d  Total boxes opened: %d", flag.getFlagCount(), boxesOpened);
                             infoStr = String.format("YOR ARE BOMBED!!! Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
                             status = Status.BOMBED;
                             break;
                         case ZERO:
-                            boxesOpened += openBoxAround(x, y);
+                            boxesOpened += openBoxAround(tmpCoord);
                         default:
                             infoStr = String.format("Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
 
@@ -85,10 +88,11 @@ public class Game {
     }
 
     public void rightMouse(int x, int y) {
+        Coord tmpCoord=new Coord(x,y);
 
         switch (status) {
             case PLAYED:
-                flag.switchFlag(x, y);
+                flag.switchFlag(tmpCoord);
                 infoStr = String.format("Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
                 //  statusString = "Bombs detected: " + flag.getFlagCount();
                 if (flag.getFlagCount() == bomb.getTotalBombsCount()) {
@@ -106,10 +110,10 @@ public class Game {
     public Cell getBox(Coord coord) {
         //   return matrix.getBox(coord.getX(), coord.getY());
 
-        if (Objects.requireNonNull(flag.getFlags(coord.getX(), coord.getY())) == Cell.OPENED) {
-            return bomb.getBomb(coord.getX(), coord.getY());
+        if (flag.getFlags(coord) == Cell.OPENED) {
+            return bomb.getBomb(coord);
         }
-        return flag.getFlags(coord.getX(), coord.getY());
+        return flag.getFlags(coord);
 
     }
 
@@ -121,20 +125,20 @@ public class Game {
         return status;
     }
 
-    private int openBoxAround(int x, int y) {
+    private int openBoxAround(Coord coord) {
         List<Coord> area = new ArrayList<>();
         int count = 0;
-        addArea(x, y, area);
-        for (Coord coord : area) {
-            if (flag.getFlags(coord.getX(), coord.getY()) == Cell.CLOSED) {
-                switch (bomb.getBomb(coord.getX(), coord.getY())) {
+        addArea(coord.getX(), coord.getY(), area);
+        for (Coord c : area) {
+            if (flag.getFlags(c) == Cell.CLOSED) {
+                switch (bomb.getBomb(c)) {
                     case ZERO:
-                        flag.setFlags(coord.getX(), coord.getY(), Cell.OPENED);
+                        flag.setFlags(c, Cell.OPENED);
                         count++;
-                        count += openBoxAround(coord.getX(), coord.getY());
+                        count += openBoxAround(c);
                         break;
                     default:
-                        flag.setFlags(coord.getX(), coord.getY(), Cell.OPENED);
+                        flag.setFlags(c, Cell.OPENED);
                         count++;
                 }
             }
@@ -152,24 +156,24 @@ public class Game {
     }
 
     private boolean checkFlagsToBombs() {
-        boolean f = true;
+        boolean flag = true;
         for (Coord coord : ranges.getCoordArrayList()) {
-            if (flag.getFlags(coord.getX(), coord.getY()) == Cell.FLAGGED & bomb.getBomb(coord.getX(), coord.getY()) != Cell.BOMB)
-                f = false;
+            if (this.flag.getFlags(coord) == Cell.FLAGGED & bomb.getBomb(coord) != Cell.BOMB)
+                flag = false;
         }
-        return f;
+        return flag;
     }
 
     void openAllField() {
         for (Coord coord : ranges.getCoordArrayList()) {
-            switch (flag.getFlags(coord.getX(), coord.getY())) {
+            switch (flag.getFlags(coord)) {
                 case FLAGGED:
-                    if (bomb.getBomb(coord.getX(), coord.getY()) != Cell.BOMB)
-                        flag.setFlags(coord.getX(), coord.getY(), Cell.NOBOMB);
+                    if (bomb.getBomb(coord) != Cell.BOMB)
+                        flag.setFlags(coord, Cell.NOBOMB);
                     break;
                 case CLOSED:
                 case INFORM:
-                    flag.setFlags(coord.getX(), coord.getY(), Cell.OPENED);
+                    flag.setFlags(coord, Cell.OPENED);
                     boxesOpened++;
                     break;
 

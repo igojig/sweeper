@@ -17,12 +17,12 @@ import java.util.Optional;
 
 public class JavaSweeper extends JFrame {
 
-    private int colsX = 15;
-    private int rowsY = 15;
+    private int colsX = 10;
+    private int rowsY = 10;
     private final double bombsFactor = 0.15;
 
 
-    public static int IMAGE_SIZE = 30;
+    public static int IMAGE_SIZE = 50;
 //    private final int IMAGE_SIZE = 50;
 
 

@@ -1,6 +1,7 @@
 package ru.igojig.sweeper;
 
 import lombok.Getter;
+import lombok.Setter;
 import ru.igojig.JavaSweeper;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.util.Objects;
 
 @Getter
+
 public enum Cell {
     ZERO("zero"),
     NUM1("num1"),
@@ -18,6 +20,7 @@ public enum Cell {
     NUM6("num6"),
     NUM7("num7"),
     NUM8("num8"),
+
     BOMB("bomb"),
 
     FLAGGED("flagged"),
