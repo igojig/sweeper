@@ -56,7 +56,7 @@ public class Bomb {
 
     private int calculateBombAround(Coord coord) {
         AtomicInteger count = new AtomicInteger();
-        List<Coord> nearCoord = coord.getNearCoord();
+        List<Coord> nearCoord = coord.getNearCoords();
 
         nearCoord.forEach(c -> {
             if (bombsMap.get(c) == Cell.BOMB) {

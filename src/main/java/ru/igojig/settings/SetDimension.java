@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.Optional;
 
-public class Settings extends JDialog {
+public class SetDimension extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -20,7 +20,7 @@ public class Settings extends JDialog {
 
 
 
-    public Settings(int x, int y) {
+    public SetDimension(int x, int y) {
         colsRows=new Coord();
 
         setContentPane(contentPane);
@@ -54,7 +54,7 @@ public class Settings extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-
+        setTitle("Размерность поля");
 
         spinnerX.setValue(x);
         spinnerY.setValue(y);

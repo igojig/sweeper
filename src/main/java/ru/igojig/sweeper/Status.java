@@ -7,8 +7,8 @@ import java.awt.*;
 @Getter
 public enum Status {
     PLAYED ("Game is started", Color.DARK_GRAY),
-    BOMBED("You are bombed (((", Color.RED),
-    WIN("You are WIN !!!", Color.BLUE);
+    BOMBED("You are bombed ((( ", Color.RED),
+    WIN("You are WIN !!! ", Color.BLUE);
 
     private final String name;
     private final Color labelColor;

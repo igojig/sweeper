@@ -1,17 +1,18 @@
-package ru.igojig;
+package ru.igojig.settings;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.*;
+import java.util.Optional;
 
-public class Ser extends JDialog {
+public class Bombs extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JSpinner spinner1;
+    private JSpinner factorSpinner;
 
-    public Ser() {
+    private Double result;
+
+    public Bombs(float factor) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -42,30 +43,30 @@ public class Ser extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        spinner1.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-
-            }
-        });
+        setTitle("Фактор бомб");
+        factorSpinner.setModel(new SpinnerNumberModel(factor, 0.05, 1.0, 0.05));
     }
 
     private void onOK() {
         // add your code here
+        result= (Double) factorSpinner.getValue();
         dispose();
     }
 
     private void onCancel() {
         // add your code here if necessary
+        result=null;
         dispose();
     }
 
-    public static void main(String[] args) {
-        Ser dialog = new Ser();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    public Optional<Double> getResult(){
+        return Optional.ofNullable(result);
     }
+
+//    public static void main(String[] args) {
+//        Bombs dialog = new Bombs();
+//        dialog.pack();
+//        dialog.setVisible(true);
+//        System.exit(0);
+//    }
 }
-
-

@@ -17,19 +17,12 @@ public class Coord {
     private int x;
     private int y;
 
-    private static Coord tmpCoord = new Coord();
-
-    public static Coord getTmpCoord(int x, int y) {
-        tmpCoord.setX(x);
-        tmpCoord.setY(y);
-        return tmpCoord;
-    }
-
     public static Coord getRandomCoord(int boundX, int boundY) {
-        return new Coord(ThreadLocalRandom.current().nextInt(boundX), ThreadLocalRandom.current().nextInt(boundY));
+        ThreadLocalRandom current = ThreadLocalRandom.current();
+        return new Coord(current.nextInt(boundX), current.nextInt(boundY));
     }
 
-    public List<Coord> getNearCoord() {
+    public List<Coord> getNearCoords() {
         List<Coord> list = new ArrayList<>();
 
         for (int dx = -1; dx <= 1; dx++) {

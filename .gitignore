@@ -17,7 +17,7 @@ target/
 .classpath
 .factorypath
 .project
-.settings
+.setDimension
 .springBeans
 .sts4-cache
 

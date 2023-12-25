@@ -1,22 +1,30 @@
 package ru.igojig.sweeper;
 
 
-import java.util.ArrayList;
+import lombok.Getter;
+
 import java.util.List;
 
 public class Game {
 
     private Bomb bomb;
+
+    @Getter
     private Range ranges;
     private Flag flag;
 
     private int boxesOpened;
 
+    @Getter
     private Status status;
+
+    @Getter
     private String infoStr;
 
     static int X_SIZE;
     static int Y_SIZE;
+
+    private final String statusStr="Bombs detected: [%d]. Total boxes opened: [%d]";
 
     public Game(int x, int y) {
         setSize(x, y);
@@ -38,12 +46,6 @@ public class Game {
         boxesOpened = 0;
     }
 
-
-    public Range getRanges() {
-        return ranges;
-    }
-
-
     public void leftMouse(int x, int y) {
 
         Coord tmpCoord = new Coord(x, y);
@@ -60,13 +62,13 @@ public class Game {
                         case BOMB:
                             bomb.setBombed(tmpCoord);
                             openAllField();
-                            infoStr = String.format("YOR ARE BOMBED!!! Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
                             status = Status.BOMBED;
+                            infoStr = status.getName() + String.format(statusStr, flag.getFlagCount(), boxesOpened);
                             break;
                         case ZERO:
                             boxesOpened += openBoxAround(tmpCoord);
                         default:
-                            infoStr = String.format("Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
+                            infoStr = String.format(statusStr, flag.getFlagCount(), boxesOpened);
                     }
                 }
             }
@@ -79,12 +81,12 @@ public class Game {
         switch (status) {
             case PLAYED:
                 flag.switchFlag(tmpCoord);
-                infoStr = String.format("Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
+                infoStr = String.format(statusStr, flag.getFlagCount(), boxesOpened);
                 if (flag.getFlagCount() == bomb.getTotalBombsCount()) {
                     if (checkFlagsToBombs()) {
                         openAllField();
-                        infoStr = String.format("YOU ARE WIN!!! Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
                         status = Status.WIN;
+                        infoStr =status.getName() +  String.format(statusStr, flag.getFlagCount(), boxesOpened);
                     }
                 }
                 break;
@@ -98,18 +100,9 @@ public class Game {
         return flag.getFlags(coord);
     }
 
-    public String getInfoStr() {
-        return infoStr;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
     private int openBoxAround(Coord coord) {
-        List<Coord> emptyArea = new ArrayList<>();
         int count = 0;
-        addToEmptyArea(coord.getX(), coord.getY(), emptyArea);
+        List<Coord> emptyArea = coord.getNearCoords();
         for (Coord c : emptyArea) {
             if (flag.getFlags(c) == Cell.CLOSED) {
                 switch (bomb.getBomb(c)) {
@@ -127,15 +120,6 @@ public class Game {
         return count;
     }
 
-    private void addToEmptyArea(int x, int y, List<Coord> area) {
-        for (int dx = -1; dx <= 1; dx++)
-            for (int dy = -1; dy <= 1; dy++) {
-                if (x + dx >= 0 & x + dx < X_SIZE & y + dy >= 0 & y + dy < Y_SIZE)
-                    if (!(dx == 0 & dy == 0))
-                        area.add(new Coord(x + dx, y + dy));
-            }
-    }
-
     private boolean checkFlagsToBombs() {
         boolean flag = true;
         for (Coord coord : ranges.getCoordArrayList()) {
@@ -148,18 +132,15 @@ public class Game {
     void openAllField() {
         for (Coord coord : ranges.getCoordArrayList()) {
             switch (flag.getFlags(coord)) {
-                case FLAGGED:
+                case FLAGGED -> {
                     if (bomb.getBomb(coord) != Cell.BOMB)
                         flag.setFlags(coord, Cell.NOBOMB);
-                    break;
-                case CLOSED:
-                case INFORM:
+                }
+                case CLOSED, INFORM -> {
                     flag.setFlags(coord, Cell.OPENED);
                     boxesOpened++;
-                    break;
-
+                }
             }
         }
     }
-
 }
