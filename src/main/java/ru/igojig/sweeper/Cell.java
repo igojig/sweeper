@@ -9,7 +9,6 @@ import java.awt.*;
 import java.util.Objects;
 
 @Getter
-
 public enum Cell {
     ZERO("zero"),
     NUM1("num1"),

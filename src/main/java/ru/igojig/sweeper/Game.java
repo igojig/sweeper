@@ -3,11 +3,8 @@ package ru.igojig.sweeper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Game {
-
-//    private Matrix matrix;
 
     private Bomb bomb;
     private Range ranges;
@@ -22,20 +19,12 @@ public class Game {
     static int Y_SIZE;
 
     public Game(int x, int y) {
-
         setSize(x, y);
-
-
-//        ranges = new Range();
-//        bomb = new Bomb();
-//        flag = new Flag();
     }
-
 
     public void setSize(int x, int y) {
         X_SIZE = x;
         Y_SIZE = y;
-
     }
 
     public void start(int bomb_count) {
@@ -57,8 +46,7 @@ public class Game {
 
     public void leftMouse(int x, int y) {
 
-        Coord tmpCoord=new Coord(x,y);
-//        Coord tmpCoord=new Coord(x,y);
+        Coord tmpCoord = new Coord(x, y);
 
         if (status == Status.PLAYED) {
             switch (flag.getFlags(tmpCoord)) {
@@ -72,7 +60,6 @@ public class Game {
                         case BOMB:
                             bomb.setBombed(tmpCoord);
                             openAllField();
-//                            infoStr = "YOR ARE BOMBED ((( " + String.format("Bombs detected: %d  Total boxes opened: %d", flag.getFlagCount(), boxesOpened);
                             infoStr = String.format("YOR ARE BOMBED!!! Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
                             status = Status.BOMBED;
                             break;
@@ -80,7 +67,6 @@ public class Game {
                             boxesOpened += openBoxAround(tmpCoord);
                         default:
                             infoStr = String.format("Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
-
                     }
                 }
             }
@@ -88,18 +74,16 @@ public class Game {
     }
 
     public void rightMouse(int x, int y) {
-        Coord tmpCoord=new Coord(x,y);
+        Coord tmpCoord = new Coord(x, y);
 
         switch (status) {
             case PLAYED:
                 flag.switchFlag(tmpCoord);
                 infoStr = String.format("Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
-                //  statusString = "Bombs detected: " + flag.getFlagCount();
                 if (flag.getFlagCount() == bomb.getTotalBombsCount()) {
                     if (checkFlagsToBombs()) {
                         openAllField();
-                        infoStr =  String.format("YOU ARE WIN!!! Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
-
+                        infoStr = String.format("YOU ARE WIN!!! Bombs detected: [%d]. Total boxes opened: [%d]", flag.getFlagCount(), boxesOpened);
                         status = Status.WIN;
                     }
                 }
@@ -108,28 +92,25 @@ public class Game {
     }
 
     public Cell getBox(Coord coord) {
-        //   return matrix.getBox(coord.getX(), coord.getY());
-
         if (flag.getFlags(coord) == Cell.OPENED) {
             return bomb.getBomb(coord);
         }
         return flag.getFlags(coord);
-
     }
 
     public String getInfoStr() {
         return infoStr;
     }
 
-    public Status getStatus(){
+    public Status getStatus() {
         return status;
     }
 
     private int openBoxAround(Coord coord) {
-        List<Coord> area = new ArrayList<>();
+        List<Coord> emptyArea = new ArrayList<>();
         int count = 0;
-        addArea(coord.getX(), coord.getY(), area);
-        for (Coord c : area) {
+        addToEmptyArea(coord.getX(), coord.getY(), emptyArea);
+        for (Coord c : emptyArea) {
             if (flag.getFlags(c) == Cell.CLOSED) {
                 switch (bomb.getBomb(c)) {
                     case ZERO:
@@ -146,7 +127,7 @@ public class Game {
         return count;
     }
 
-    private void addArea(int x, int y, List<Coord> area) {
+    private void addToEmptyArea(int x, int y, List<Coord> area) {
         for (int dx = -1; dx <= 1; dx++)
             for (int dy = -1; dy <= 1; dy++) {
                 if (x + dx >= 0 & x + dx < X_SIZE & y + dy >= 0 & y + dy < Y_SIZE)

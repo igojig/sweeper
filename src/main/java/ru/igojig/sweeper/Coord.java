@@ -2,31 +2,22 @@ package ru.igojig.sweeper;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-//@AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode
 public class Coord {
     private int x;
     private int y;
 
-    private static Coord tmpCoord=new Coord();
-
-    public Coord(int x, int y){
-        this.x=x;
-        this.y=y;
-        System.out.println(toString() + " [" + hashCode() + "]");
-    }
-
-    public Coord(Coord coord){
-        this.x=coord.getX();
-        this.y=coord.getY();
-    }
-
+    private static Coord tmpCoord = new Coord();
 
     public static Coord getTmpCoord(int x, int y) {
         tmpCoord.setX(x);
@@ -34,50 +25,20 @@ public class Coord {
         return tmpCoord;
     }
 
-    @Override
-    public int hashCode() {
-        int tmp = ( y +  ((x+1)/2));
-        return x +  (tmp * tmp);
+    public static Coord getRandomCoord(int boundX, int boundY) {
+        return new Coord(ThreadLocalRandom.current().nextInt(boundX), ThreadLocalRandom.current().nextInt(boundY));
     }
 
-    //    private Box box;
+    public List<Coord> getNearCoord() {
+        List<Coord> list = new ArrayList<>();
 
-//    public Coord(int x, int y) {
-//        this.x = x;
-//        this.y = y;
-////        box=Box.CLOSED;
-//    }
-
-//    public int getX() {
-//        return x;
-//    }
-//
-//    public int getY() {
-//        return y;
-//    }
-
-//    public Box getBox(){
-//        return box;
-//    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Coord coord)) return false;
-        return x == coord.x && y == coord.y;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (!(dx == 0 & dy == 0)) {
+                    list.add(new Coord(x + dx, y + dy));
+                }
+            }
+        }
+        return list;
     }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(x, y);
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "Coord{" +
-//                "x=" + x +
-//                ", y=" + y +
-//                '}';
-//    }
 }
