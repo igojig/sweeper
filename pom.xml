@@ -68,11 +68,11 @@
                 </configuration>
             </plugin>
 
-            <!--================================================================ -->
-            <!--Compiling IntelliJ Designer Forms with Maven                     -->
-            <!--                                                                 -->
-            <!--from https://tobiasmanske.de/posts/2021-02-23-maven-ij-designer/ -->
-            <!--================================================================ -->
+            <!--==================================================================== -->
+            <!--        Compiling IntelliJ Designer Forms with Maven                 -->
+            <!--                                                                     -->
+            <!--    from https://tobiasmanske.de/posts/2021-02-23-maven-ij-designer/ -->
+            <!--==================================================================== -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
