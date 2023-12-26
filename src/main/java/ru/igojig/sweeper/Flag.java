@@ -9,13 +9,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Flag {
 
-    private Range ranges;
-
     private Map<Coord, Cell> flagsMap;
-
-    public Flag(Range ranges) {
-        this.ranges = ranges;
-    }
 
     @Getter
     private int flagCount;
@@ -27,7 +21,7 @@ public class Flag {
     }
 
     void initFlag() {
-        ranges.getCoordArrayList().forEach(coord -> flagsMap.put(coord, Cell.CLOSED));
+        Coord.getGameField().forEach(coord -> flagsMap.put(coord, Cell.CLOSED));
     }
 
     public void switchFlag(Coord coord) {

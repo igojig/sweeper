@@ -64,14 +64,12 @@ public class JavaSweeper extends JFrame {
         menuItem2 = new JMenuItem("Количество бомб");
 
 
-        menuRestart.addItemListener(e->restart());
+        menuRestart.addItemListener(e -> restart());
 
         menuItem1.addActionListener(actionEvent -> {
-//                System.out.println(actionEvent.getActionCommand());
             SetDimension setDimension = new SetDimension(colsX, rowsY);
             setDimension.pack();
             setDimension.setLocationRelativeTo(panel);
-//                s.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             setDimension.setVisible(true);
             Optional<Coord> colsRows = setDimension.getColsRows();
             if (colsRows.isPresent()) {
@@ -126,7 +124,7 @@ public class JavaSweeper extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                for (Coord coord : game.getRanges().getCoordArrayList()) {
+                for (Coord coord : game.getGameField()) {
                     g.drawImage(game.getBox(coord).getImage(), coord.getX() * IMAGE_SIZE, coord.getY() * IMAGE_SIZE, this);
                 }
                 label.setText(game.getInfoStr());

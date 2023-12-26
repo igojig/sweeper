@@ -6,11 +6,8 @@ import lombok.Getter;
 import java.util.List;
 
 public class Game {
-
     private Bomb bomb;
 
-    @Getter
-    private Range ranges;
     private Flag flag;
 
     private int boxesOpened;
@@ -21,24 +18,27 @@ public class Game {
     @Getter
     private String infoStr;
 
-    static int X_SIZE;
-    static int Y_SIZE;
+    @Getter
+    private static int colsX;
+    @Getter
+    private static int rowsY;
 
-    private final String statusStr="Bombs detected: [%d]. Total boxes opened: [%d]";
+    private final String statusStr = "Bombs detected: [%d]. Total boxes opened: [%d]";
 
     public Game(int x, int y) {
         setSize(x, y);
     }
 
     public void setSize(int x, int y) {
-        X_SIZE = x;
-        Y_SIZE = y;
+        colsX = x;
+        rowsY = y;
+        Coord.initCoords();
     }
 
     public void start(int bomb_count) {
-        ranges = new Range();
-        bomb = new Bomb(ranges);
-        flag = new Flag(ranges);
+
+        bomb = new Bomb();
+        flag = new Flag();
         bomb.start(bomb_count);
         flag.start();
         infoStr = Status.PLAYED.getName();
@@ -48,7 +48,7 @@ public class Game {
 
     public void leftMouse(int x, int y) {
 
-        Coord tmpCoord = new Coord(x, y);
+        Coord tmpCoord = Coord.getCoordByXY(x, y).orElseThrow();
 
         if (status == Status.PLAYED) {
             switch (flag.getFlags(tmpCoord)) {
@@ -76,7 +76,8 @@ public class Game {
     }
 
     public void rightMouse(int x, int y) {
-        Coord tmpCoord = new Coord(x, y);
+
+        Coord tmpCoord = Coord.getCoordByXY(x, y).orElseThrow();
 
         switch (status) {
             case PLAYED:
@@ -86,7 +87,7 @@ public class Game {
                     if (checkFlagsToBombs()) {
                         openAllField();
                         status = Status.WIN;
-                        infoStr =status.getName() +  String.format(statusStr, flag.getFlagCount(), boxesOpened);
+                        infoStr = status.getName() + String.format(statusStr, flag.getFlagCount(), boxesOpened);
                     }
                 }
                 break;
@@ -122,7 +123,7 @@ public class Game {
 
     private boolean checkFlagsToBombs() {
         boolean flag = true;
-        for (Coord coord : ranges.getCoordArrayList()) {
+        for (Coord coord : Coord.getGameField()) {
             if (this.flag.getFlags(coord) == Cell.FLAGGED & bomb.getBomb(coord) != Cell.BOMB)
                 flag = false;
         }
@@ -130,7 +131,7 @@ public class Game {
     }
 
     void openAllField() {
-        for (Coord coord : ranges.getCoordArrayList()) {
+        for (Coord coord : Coord.getGameField()) {
             switch (flag.getFlags(coord)) {
                 case FLAGGED -> {
                     if (bomb.getBomb(coord) != Cell.BOMB)
@@ -142,5 +143,9 @@ public class Game {
                 }
             }
         }
+    }
+
+    public List<Coord> getGameField(){
+        return Coord.getGameField();
     }
 }
