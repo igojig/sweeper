@@ -4,11 +4,11 @@
 ![Static Badge](https://img.shields.io/badge/Maven-blue)
 
 ## Игра "Сапёр"
-<picture align="center">
-    <img alt="sample" src="./assets/process.png" width="50%" height="50%" />
-    <img alt="sample" src="./assets/win.png" width="50%" height="50%" />
-    <img alt="sample" src="./assets/fault.png" width="50%" height="50%" />
-</picture>
+<p align="center">
+    <img alt="process" src="./assets/process.png" width="40%" height="40%" />
+    <img alt="win" src="./assets/win.png" width="40%" height="40%" />
+    <img alt="fault" src="./assets/fault.png" width="40%" height="40%" />
+<p/>
 
 
 
@@ -32,5 +32,5 @@ mvn clean compile
 mvn exec:java
 ```
 
-### Примечание
+#### Примечание
 В проекте используется `IntelliJ Designer Forms`, для корректной сборки добавлен соответствующий `Maven-plugin`
