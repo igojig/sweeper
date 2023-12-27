@@ -9,7 +9,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Flag {
 
-    private Map<Coord, Cell> flagsMap;
+    private Map<Coordinate, Cell> flagsMap;
 
     @Getter
     private int flagCount;
@@ -21,28 +21,28 @@ public class Flag {
     }
 
     void initFlag() {
-        Coord.getGameField().forEach(coord -> flagsMap.put(coord, Cell.CLOSED));
+        Coordinate.getGameField().forEach(coord -> flagsMap.put(coord, Cell.CLOSED));
     }
 
-    public void switchFlag(Coord coord) {
-        switch (flagsMap.get(coord)) {
+    public void switchFlag(Coordinate coordinate) {
+        switch (flagsMap.get(coordinate)) {
             case CLOSED -> {
-                flagsMap.put(coord, Cell.FLAGGED);
+                flagsMap.put(coordinate, Cell.FLAGGED);
                 flagCount++;
             }
             case FLAGGED -> {
-                flagsMap.put(coord, Cell.INFORM);
+                flagsMap.put(coordinate, Cell.INFORM);
                 flagCount--;
             }
-            case INFORM -> flagsMap.put(coord, Cell.CLOSED);
+            case INFORM -> flagsMap.put(coordinate, Cell.CLOSED);
         }
     }
 
-    public Cell getFlags(Coord coord) {
-        return flagsMap.get(coord);
+    public Cell getFlags(Coordinate coordinate) {
+        return flagsMap.get(coordinate);
     }
 
-    public void setFlags(Coord coord, Cell cell) {
-        flagsMap.put(coord, cell);
+    public void setFlags(Coordinate coordinate, Cell cell) {
+        flagsMap.put(coordinate, cell);
     }
 }

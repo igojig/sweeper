@@ -9,7 +9,7 @@ import java.util.Map;
 
 @NoArgsConstructor
 public class Bomb {
-    private Map<Coord, Cell> bombsMap;
+    private Map<Coordinate, Cell> bombsMap;
 
     @Getter
     private int totalBombsCount;
@@ -25,16 +25,16 @@ public class Bomb {
         totalBombsCount = bombCount;
         int count = 0;
         while (count < bombCount) {
-            Coord randomCoord = Coord.getRandomCoord(Game.getColsX(), Game.getRowsY());
-            if (bombsMap.entrySet().stream().noneMatch(coordCellEntry -> coordCellEntry.getKey().equals(randomCoord))) {
-                bombsMap.put(randomCoord, Cell.BOMB);
+            Coordinate randomCoordinate = Coordinate.getRandomCoord(Game.getColsX(), Game.getRowsY());
+            if (bombsMap.entrySet().stream().noneMatch(coordCellEntry -> coordCellEntry.getKey().equals(randomCoordinate))) {
+                bombsMap.put(randomCoordinate, Cell.BOMB);
                 count++;
             }
         }
     }
 
     private void setAllNumbers() {
-        Coord.getGameField().stream()
+        Coordinate.getGameField().stream()
                 .filter(c -> bombsMap.get(c) != Cell.BOMB)
                 .forEach(c -> {
                     int i = calculateBombAround(c);
@@ -42,19 +42,19 @@ public class Bomb {
                 });
     }
 
-    public void setBombed(Coord coord) {
-        bombsMap.put(coord, Cell.BOMBED);
+    public void setBombed(Coordinate coordinate) {
+        bombsMap.put(coordinate, Cell.BOMBED);
     }
 
-    private int calculateBombAround(Coord coord) {
-        List<Coord> nearCoord = coord.getNearCoords();
+    private int calculateBombAround(Coordinate coordinate) {
+        List<Coordinate> nearCoordinate = coordinate.getNearCoords();
 
-        return (int) nearCoord.stream()
+        return (int) nearCoordinate.stream()
                 .filter(c -> bombsMap.get(c) == Cell.BOMB)
                 .count();
     }
 
-    public Cell getBomb(Coord coord) {
-        return bombsMap.get(coord);
+    public Cell getBomb(Coordinate coordinate) {
+        return bombsMap.get(coordinate);
     }
 }

@@ -4,7 +4,7 @@ package ru.igojig;
 import ru.igojig.settings.Bombs;
 import ru.igojig.settings.SetDimension;
 import ru.igojig.sweeper.Cell;
-import ru.igojig.sweeper.Coord;
+import ru.igojig.sweeper.Coordinate;
 import ru.igojig.sweeper.Game;
 
 import javax.swing.*;
@@ -16,9 +16,9 @@ import java.util.Optional;
 
 public class JavaSweeper extends JFrame {
 
-    private int colsX = 15;
-    private int rowsY = 15;
-    private  float bombsFactor = 0.2f;
+    private int colsX = 10;
+    private int rowsY = 10;
+    private float bombsFactor = 0.15f;
 
 
     public static int IMAGE_SIZE = 50;
@@ -59,7 +59,7 @@ public class JavaSweeper extends JFrame {
 
         menuBar = new JMenuBar();
         menu = new JMenu("Настройки");
-        menuRestart =new JMenu("Перезапуск");
+        menuRestart = new JMenu("Перезапуск");
         menuItem1 = new JMenuItem("Размерность поля");
         menuItem2 = new JMenuItem("Количество бомб");
 
@@ -71,7 +71,7 @@ public class JavaSweeper extends JFrame {
             setDimension.pack();
             setDimension.setLocationRelativeTo(panel);
             setDimension.setVisible(true);
-            Optional<Coord> colsRows = setDimension.getColsRows();
+            Optional<Coordinate> colsRows = setDimension.getColsRows();
             if (colsRows.isPresent()) {
                 colsX = colsRows.get().getX();
                 rowsY = colsRows.get().getY();
@@ -82,13 +82,13 @@ public class JavaSweeper extends JFrame {
         });
 
         menuItem2.addActionListener(actionEvent -> {
-            Bombs bombs=new Bombs(bombsFactor);
+            Bombs bombs = new Bombs(bombsFactor);
             bombs.pack();
             bombs.setLocationRelativeTo(panel);
             bombs.setVisible(true);
-            Optional<Double> result=bombs.getResult();
-            if(result.isPresent()){
-                bombsFactor=result.get().floatValue();
+            Optional<Double> result = bombs.getResult();
+            if (result.isPresent()) {
+                bombsFactor = result.get().floatValue();
                 restart();
             }
         });
@@ -124,9 +124,10 @@ public class JavaSweeper extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                for (Coord coord : game.getGameField()) {
-                    g.drawImage(game.getBox(coord).getImage(), coord.getX() * IMAGE_SIZE, coord.getY() * IMAGE_SIZE, this);
-                }
+                game.getGameField()
+                        .forEach(c -> g.drawImage(game.getBox(c).getImage(),
+                                c.getX() * IMAGE_SIZE, c.getY() * IMAGE_SIZE, this));
+
                 label.setText(game.getInfoStr());
                 label.setForeground(game.getStatus().getLabelColor());
                 repaint();
@@ -154,7 +155,7 @@ public class JavaSweeper extends JFrame {
         add(panel);
     }
 
-    private int calculateBombsCount(){
-        return  (int)(colsX * rowsY * bombsFactor);
+    private int calculateBombsCount() {
+        return (int) (colsX * rowsY * bombsFactor);
     }
 }

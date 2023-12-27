@@ -1,6 +1,6 @@
 package ru.igojig.settings;
 
-import ru.igojig.sweeper.Coord;
+import ru.igojig.sweeper.Coordinate;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -15,13 +15,13 @@ public class SetDimension extends JDialog {
     private JSpinner spinnerX;
 
 
-    private Coord colsRows;
+    private Coordinate colsRows;
 
 
 
 
     public SetDimension(int x, int y) {
-        colsRows=new Coord();
+        colsRows=new Coordinate();
 
         setContentPane(contentPane);
         setModal(true);
@@ -75,7 +75,7 @@ public class SetDimension extends JDialog {
         dispose();
     }
 
-    public Optional<Coord> getColsRows() {
+    public Optional<Coordinate> getColsRows() {
         return Optional.ofNullable(colsRows);
     }
 
